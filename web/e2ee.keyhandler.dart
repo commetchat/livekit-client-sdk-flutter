@@ -186,8 +186,13 @@ class ParticipantKeyHandler {
 
   Future<void> setKey(Uint8List key, {int keyIndex = 0}) async {
     final keyMaterial = await worker.crypto.subtle
-        .importKey('raw', key.toJS, {'name': 'PBKDF2'.toJS}.jsify() as JSAny, false,
-            ['deriveBits', 'deriveKey'].jsify() as JSArray<JSString>)
+        .importKey(
+          'raw',
+          key.toJS,
+          {'name': 'HKDF'.toJS}.jsify() as JSAny,
+          false,
+          ['deriveBits', 'deriveKey'].jsify() as JSArray<JSString>,
+        )
         .toDart;
 
     final keySet = await deriveKeys(
@@ -230,7 +235,7 @@ class ParticipantKeyHandler {
   /// https://tools.ietf.org/html/draft-omara-sframe-00#section-4.3.5.1
 
   Future<Uint8List> ratchet(web.CryptoKey material, Uint8List salt) async {
-    final algorithmOptions = getAlgoOptions('PBKDF2', salt);
+    final algorithmOptions = getAlgoOptions('HKDF', salt);
 
     // https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/deriveBits
     final newKey = await worker.crypto.subtle
