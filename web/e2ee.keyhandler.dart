@@ -97,7 +97,7 @@ class ParticipantKeyHandler {
     required this.keyOptions,
     required this.participantIdentity,
   }) {
-    if (keyOptions.keyRingSze <= 0 || keyOptions.keyRingSze > 255) {
+    if (keyOptions.keyRingSze <= 0 || keyOptions.keyRingSze > 256) {
       throw Exception('Invalid key ring size');
     }
     cryptoKeyRing = List.filled(keyOptions.keyRingSze, null);
